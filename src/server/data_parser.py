@@ -27,14 +27,13 @@ class DataParser:
         if NEW_LINE not in self.data:
             return
         parsed_arr = self.data.split(NEW_LINE)
-        print(parsed_arr)
-        if len(parsed_arr) >= REQUEST_LINES_COUNT:
+        if len(parsed_arr) <= REQUEST_LINES_COUNT:
             return
         self.data_not_complete = False
-        self.request = parsed_arr[0]
+        self.request = parsed_arr[0].strip().upper()
         self.request_data = parsed_arr[1]
-        if SPACE not in parsed_arr[1]:
+        if SPACE in parsed_arr[1]:
             second_line_arr = parsed_arr[1].split(SPACE)
-            self.command = second_line_arr[0]
-            self.request_data = second_line_arr[1]
+            self.command = second_line_arr[0].strip().upper()
+            self.request_data = second_line_arr[1].strip()
         return

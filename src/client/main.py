@@ -3,6 +3,7 @@ import socket
 import time
 
 NEW_LINE = "\n"
+NOT_FOUND_ASWER = "not_found"
 
 
 def get_command_line_arguments():
@@ -32,7 +33,9 @@ def get_host(src):
 
 
 def get_socket_data_for_send(request, command, data):
-    return f"{request}{NEW_LINE}{command}{data}{NEW_LINE}".encode()
+    if command:
+        return f"{request}{NEW_LINE}{command} {data}{NEW_LINE}".encode()
+    return f"{request}{NEW_LINE}{data}{NEW_LINE}".encode()
 
 
 def main():
@@ -50,8 +53,11 @@ def main():
             sock.send(get_socket_data_for_send("STATUS", task_id))
             cnt = cnt + 1
             if cnt > max_wait:
-                print("reached max ")
+                print("reached max wait ")
                 break
+            result = sock.recv(1024)
+            if result != NOT_FOUND_ASWER:
+                print(result)
             time.sleep(1)
     sock.close()
 
